@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stripe Payment</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h1>Pay for a Blog Read</h1>
+  <div id="payment-form">
+    <button id="card-button">Pay with Card</button>
+    <button id="upi-button">Pay with UPI</button>
+    <button id="netbanking-button">Pay with Netbanking</button>
+  </div>
+
+  <script>
+    var stripe = Stripe('pk_test_51NHmMFSBEm4wd96MaCTKqQK3z0srFzvNtaNrKfjaxFEtvvyyD1FgTvB9OSPj2MDHbPyTQZNvyrJ1SCWiP8qMVz1G00L7bzz2oY');
+    var elements = stripe.elements();
+
+    var style = {
+      base: {
+        color: '#32325d',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+          color: '#aab7c4'
+        }
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a'
+      }
+    };
+
+    var cardButton = document.getElementById('card-button');
+    var upiButton = document.getElementById('upi-button');
+    var netbankingButton = document.getElementById('netbanking-button');
+
+    // Create a payment intent based on the payment method selected
+    function createPaymentIntent(paymentMethod) {
+      fetch('/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          paymentMethod,
+          amount: 500 // Amount in cents (e.g., 500 cents = ₹5.00)
+        })
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        handleCardPayment(data.clientSecret);
+      });
+    }
+
+    function handleCardPayment(clientSecret) {
+      cardButton.addEventListener('click', function() {
+        stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: elements.getElement('card'),
+            billing_details: {
+              name: 'Card Holder Name'
+            }
+          }
+        }).then(function(result) {
+          if (result.error) {
+            console.log(result.error.message);
+          } else {
+            console.log('Payment successful');
+            // Handle success as needed
+          }
+        });
+      });
+    }
+
+    cardButton.addEventListener('click', function() {
+      var card = elements.create('card', {style: style});
+      card.mount('#payment-form');
+    });
+
+    upiButton.addEventListener('click', function() {
+      createPaymentIntent('upi');
+    });
+
+    netbankingButton.addEventListener('click', function() {
+      createPaymentIntent('netbanking');
+    });
+  </script>
+</body>
+</html>
+
+   

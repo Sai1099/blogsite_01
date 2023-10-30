@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Checkout</title>
+</head>
+<body>
+  <h1>Payment Checkout</h1>
+  <p>Redirecting to Stripe Payment Link...</p>
+
+  <script>
+    // Function to generate a Stripe Payment Link
+    function generatePaymentLink() {
+      // Call an API or server-side function to generate the payment link
+      // Replace this part with your actual code to generate the payment link
+      const YOUR_PAYMENT_LINK_URL = 'https://buy.stripe.com/test_3csdTt2WyfGC2JyfYY'; // Replace with your actual payment link
+
+      return YOUR_PAYMENT_LINK_URL;
+    }
+
+    function redirectToPaymentPage() {
+      const paymentLink = generatePaymentLink();
+      window.location.href = paymentLink; // Redirect to the payment link
+    }
+
+    redirectToPaymentPage(); // Call the function to redirect to the payment link
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blog Read Per Pay</title>
+</head>
+<body>
+
+<h1>Blog Read Per Pay</h1>
+
+<form action="/charge" method="POST">
+  <input type="hidden" name="amount" value="1">
+  <input type="text" name="card_number" placeholder="Card Number">
+  <input type="text" name="card_exp_month" placeholder="Expiry Month">
+  <input type="text" name="card_exp_year" placeholder="Expiry Year">
+  <input type="text" name="card_cvc" placeholder="CVC">
+
+  <input type="submit" value="Pay">
+</form>
+
+<script src="https://checkout.stripe.com/checkout.js"></script>
+
+</body>
+</html>
